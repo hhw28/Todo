@@ -8,7 +8,7 @@
 /coverage
 
 # production
-
+"homepage":"https://hhw28.github.io/webpack-demo/build"
 
 # misc
 .DS_Store
