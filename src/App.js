@@ -4,13 +4,14 @@ import TodoInput from './TodoInput'
 import TodoItem from './TodoItem'
 import 'normalize.css'
 import './reset.css'
+import * as localStore from './localStore'
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state  = {
       newTodo: "",
-      todoList: []
+      todoList: localStore.load('todoList') || []
     }
   }
   render() {
@@ -18,7 +19,7 @@ class App extends Component {
       .filter((item)=> !item.delete)
       .map((item,index)=>{
 
-      return (
+      return ( // 为什么这里要加个括号？这是动手题3
         <li key={index}>
           <TodoItem todo={item} 
                     onToggle={this.toggle.bind(this)}
@@ -44,10 +45,12 @@ class App extends Component {
   delete(event,todo){
     todo.delete = true
     this.setState(this.state)
+    localStore.save('todoList',this.state.todoList)
   }
   toggle(e,todo){
     todo.status = todo.status === 'completed' ? '' :'completed'
     this.setState(this.state)
+    localStore.save('todoList',this.state.todoList)
   }
   changeTitle(event){
     this.setState({
@@ -66,6 +69,7 @@ class App extends Component {
       newTodo:'',
       todoList:this.state.todoList
     })
+    localStore.save('todoList',this.state.todoList)
   }
 }
 
