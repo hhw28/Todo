@@ -5,6 +5,8 @@ import TodoItem from './TodoItem'
 import 'normalize.css'
 import './reset.css'
 import UserDialog from './UserDialog.js'
+import {getCurrentUser,signOut} from './leanCloud'
+import DeepCopyJSON from'./DeepCopyJSON'
 
 
 
@@ -12,6 +14,7 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state  = {
+      user: getCurrentUser() || {},
       newTodo: "",
       todoList:[]
     }
@@ -31,7 +34,10 @@ class App extends Component {
     return (
       <div className="App">
         <header className="header">
-          <h1 className="title">我的待办</h1>
+          <h1 className="title">
+              {this.state.user.username||'我'}的待办
+              <button onClick={this.signOut.bind(this)}>登出</button>
+          </h1>
         </header>
         <div className="inputWrapper">
           <TodoInput content={this.state.newTodo}
@@ -41,9 +47,23 @@ class App extends Component {
         <ol className="todoList">
           {todos}
         </ol>
-        <UserDialog/>
+        {this.state.user.id ? null :   //如果注册成功就关闭 UserDialog
+          <UserDialog onSignUp={this.onSignUporSignIn.bind(this)}
+                      onSignIn={this.onSignUporSignIn.bind(this)}/>
+        }
       </div>
     )
+  }
+  signOut(){
+    signOut()
+    let stateCopy = DeepCopyJSON(this.state)
+    stateCopy.user = {}
+    this.setState(stateCopy) 
+  }
+  onSignUporSignIn(user){
+    let stateCopy = DeepCopyJSON(this.state)
+    stateCopy.user = user
+    this.setState(stateCopy)  
   }
   componentDidUpdate(){
 
