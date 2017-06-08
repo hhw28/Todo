@@ -4,7 +4,8 @@ import TodoInput from './TodoInput'
 import TodoItem from './TodoItem'
 import 'normalize.css'
 import './reset.css'
-import * as localStore from './localStore'
+import UserDialog from './UserDialog.js'
+
 
 
 class App extends Component {
@@ -12,21 +13,19 @@ class App extends Component {
     super(props)
     this.state  = {
       newTodo: "",
-      todoList: localStore.load('todoList') || []
+      todoList:[]
     }
   }
-  render() {
+  render(){
     let todos = this.state.todoList
       .filter((item)=> !item.delete)
       .map((item,index)=>{
-
       return ( // 为什么这里要加个括号？这是动手题3
-        <li key={index}>
-          <TodoItem todo={item} 
-                    onToggle={this.toggle.bind(this)}
-                    onDelete={this.delete.bind(this)} />
-        </li>
-      )
+          <li key={index}>
+            <TodoItem todo={item} 
+                      onToggle={this.toggle.bind(this)}
+                      onDelete={this.delete.bind(this)} />
+          </li>)
     })
 
     return (
@@ -42,11 +41,12 @@ class App extends Component {
         <ol className="todoList">
           {todos}
         </ol>
+        <UserDialog/>
       </div>
     )
   }
   componentDidUpdate(){
-    localStore.save('todoList', this.state.todoList)
+
   }
   delete(event,todo){
     todo.delete = true
