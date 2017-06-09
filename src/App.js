@@ -27,7 +27,7 @@ class App extends Component {
   }
    
   render(){
-    let todos = this.state.todoList.filter((item)=> !item.delete).map((item,index)=>{
+    let todos = this.state.todoList.filter((item)=> !item.deleted).map((item,index)=>{
 
       return ( // 为什么这里要加个括号？这是动手题3
           <li key={index}>
@@ -111,7 +111,7 @@ class App extends Component {
 
   delete(event,todo){
     TodoModel.destroy(todo.id,() => {
-      todo.deleted = true
+      todo.deleted= true
       this.setState(this.state)
     })
   }
