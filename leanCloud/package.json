@@ -17,5 +17,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://hhw28.github.io/React-TodoList/TodoList/build"
+  "homepage": "https://hhw28.github.io/React-TodoList/leanCloud/build"
 }

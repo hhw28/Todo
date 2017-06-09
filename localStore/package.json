@@ -17,5 +17,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://hhw28.github.io/React-TodoList/TodoList-localStore/build"
+  "homepage": "https://hhw28.github.io/React-TodoList/localStore/build"
 }
