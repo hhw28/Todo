@@ -25,9 +25,8 @@ class App extends Component {
       })
     }
   }
-   
   render(){
-    let todos = this.state.todoList.filter((item)=> !item.deleted).map((item,index)=>{
+    let todos = this.state.todoList.filter((item)=>!item.deleted).map((item,index)=>{
 
       return ( // 为什么这里要加个括号？这是动手题3
           <li key={index}>
@@ -64,12 +63,25 @@ class App extends Component {
     signOut()
     let stateCopy = DeepCopyJSON(this.state)
     stateCopy.user = {}
+//解决退出登录TodoItem不更新
+    stateCopy.todoList = []
+    stateCopy.newTodo = ''
+
     this.setState(stateCopy) 
   }
   onSignUporSignIn(user){
     let stateCopy = DeepCopyJSON(this.state)
     stateCopy.user = user
-    this.setState(stateCopy)  
+    this.setState(stateCopy)
+//解决退出登录TodoItem不更新
+    let users = getCurrentUser()
+    if (users) {
+      TodoModel.getByUser(users, (todos) => {
+        let stateCopy = DeepCopyJSON(this.state)
+        stateCopy.todoList = todos
+        this.setState(stateCopy)
+      })
+    }
   }
   componentDidUpdate(){
 
