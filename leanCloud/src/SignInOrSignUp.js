@@ -18,13 +18,13 @@ export default class SignInOrSignUp extends Component{
         return(
             <div className="signInOrSignUp">
                 <nav>
-                    <label>
+                    <label className="signUp">
                         <input type="radio" value="signUp" 
                                checked={this.state.selected === 'signUp'} 
                                onChange={this.switch.bind(this)}/>
                     注册</label>
                     
-                    <label>
+                    <label className="signIn">
                         <input type="radio" value="signIn" 
                                 checked={this.state.selected === 'signIn'}
                                 onChange={this.switch.bind(this)}/> 

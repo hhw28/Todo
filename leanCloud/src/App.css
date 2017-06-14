@@ -3,30 +3,60 @@
    border-radius: 8px;
    background: white;
    margin: 8em;
-   min-height: 32em;
-   min-width: 25em;
+   min-height: 35em;
+   min-width: 26em;
    box-shadow: 0 0 1em hsla(0,0%,0%,0.15);
    z-index: 1;
+   position: relative;
 }
 .App > .todoList> li:nth-child(odd){
-  background: rgba(128,203,240,0.2);
+  background: rgba(226,211,255,0.2);
 }
 .App > .todoList> li:nth-child(even){
   background: transparent;
 }
 
-
-.App .header{
-  padding:3em 0em;
-  border-radius: 8px 8px 0 0 ;
-  background: url(../img/01.jpg) bottom no-repeat;
-  background-size: 120% 135%;
+.App .header {
+  padding-top:0.5em;
+  padding-bottom: 0.1em;
+  box-shadow: 0px 8px 41px -16px #7980f3;
+  margin-bottom: 2.5em;
 }
 .App .header .title{
-  color: #fff;
+  color: #7098f3;
   margin: 0.7em;
-  position: relative;
-  top:1.1em;
-  font-size: 2.3em;
+  font-size: 1.5em;
+
+}
+.App .header .title button{
+  font-size:0.7em;
+  padding: 0.2em 0.7em;
+  color: #fff;
+  background: #7098f3;
+  border:none;
+  border-radius: 0.2em;
+  margin-left: 12em;  
+}
+.App .addinput{
+  width: 1em;
+  height: 1em;
+  font-size: 3.3em;
+  font-family: "MingLiU";
+  text-align: center;
+  line-height: 0.9em;
+  color: #fff;
+  border-radius: 50%;
+  background: #7098f3;
+  position: absolute;
+  bottom: 0.4em;
+  left: 3.6em;
+  box-shadow: 0px 2px 15px -2px #7980f3
 }
 
+.App .inputWrapper{
+  display: none;
+}
+
+.App .todoList{
+  margin: 0 1em;
+}

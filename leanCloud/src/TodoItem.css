@@ -10,7 +10,7 @@
   color: #666;
 }
 .TodoItem>.button{
-  background: linear-gradient(to right,rgba(84,152,230,1),rgba(85,222,232,1));
+  background: linear-gradient(to right,rgba(84,152,230,1),rgba(105,153,232,0.88));
   color: #fff;
   width: 1.2em;
   height: 1.2em;

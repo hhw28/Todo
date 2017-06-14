@@ -7,6 +7,7 @@ import TodoItem from './TodoItem'
 import UserDialog from './UserDialog'
 import {getCurrentUser,signOut,TodoModel} from './leanCloud'
 import DeepCopyJSON from'./DeepCopyJSON'
+import $ from 'jquery'
 
 class App extends Component {
   constructor(props){
@@ -52,12 +53,16 @@ class App extends Component {
           <ol className="todoList">
             {todos}
           </ol>
+          <div className="addinput" onClick={this.showInput.bind(this)}>+</div>
           {this.state.user.id ? null :   //如果注册成功就关闭 UserDialog
             <UserDialog onSignUp={this.onSignUporSignIn.bind(this)}
                         onSignIn={this.onSignUporSignIn.bind(this)}/>
           }
         </div>
       )
+  }
+  showInput(){
+    $('.inputWrapper').show()
   }
   signOut(){
     signOut()
