@@ -17,3 +17,7 @@
   border:#fff;
   border-radius: 50%;
 }
+.TodoItem >.checked{
+	text-decoration: line-through;
+	opacity: 0.5;
+}
