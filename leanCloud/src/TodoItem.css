@@ -12,8 +12,9 @@
 	text-decoration: line-through;
 	opacity: 0.5;
 }
+/*垃圾桶的颜色也变更*/
 .TodoItem >.completed1{
-	color: #a0a1a2;
+	color: #a0a1a2;  
 }
 
 
@@ -32,6 +33,6 @@
   font-size: 19px;  
 }
 .TodoItem .icon-completed{ 
-  font-size: 18px;  
+  font-size: 20px;  
   color:#a0a1a2;
 }

@@ -7,7 +7,6 @@
    min-width: 26em;
    box-shadow: 0 0 1em hsla(0,0%,0%,0.15);
    z-index: 1;
-   position: relative;
 }
 .App > .todoList> li:nth-child(odd){
   background: rgba(226,211,255,0.2);
@@ -37,24 +36,28 @@
   border-radius: 0.2em;
   margin-left: 12em;  
 }
-.App .addinput{
-  width: 1em;
-  height: 1em;
-  font-size: 3.3em;
-  font-family: "MingLiU";
-  text-align: center;
-  line-height: 0.9em;
-  color: #fff;
-  border-radius: 50%;
-  background: #7098f3;
-  position: absolute;
-  bottom: 0.4em;
-  left: 3.6em;
-  box-shadow: 0px 2px 15px -2px #7980f3
-}
 
-.App .inputWrapper{
+.footer{
+  display: flex;
+  position: absolute;
+  bottom:9em;
+  left: 34.5em;
+}
+.footer .inputWrapper{
+  align-self: center;
   display: none;
+}
+.addinput{
+    width: 1em;
+    height: 1em;
+    font-size: 3.3em;
+    font-family: "MingLiU";
+    text-align: center;
+    line-height: 0.9em;
+    color: #fff;
+    border-radius: 50%;
+    background: #7098f3;
+    box-shadow: 0px 2px 15px -2px #7980f3
 }
 
 .App .todoList{

@@ -46,15 +46,19 @@ class App extends Component {
                 <button onClick={this.signOut.bind(this)}>登出</button>
             </h1>
           </header>
-          <div className="inputWrapper">
-            <TodoInput content={this.state.newTodo}
-                      onChange={this.changeTitle.bind(this)} 
-                      onSubmit={this.addTodo.bind(this)} />
-          </div>
+
           <ol className="todoList">
             {todos}
           </ol>
-          <div className="addinput" onClick={this.showInput.bind(this)}>+</div>
+          <div className="footer">
+            <div className="addinput" onClick={this.showInput.bind(this)}>+</div>
+            <div className="inputWrapper">
+              <TodoInput content={this.state.newTodo}
+                        onChange={this.changeTitle.bind(this)} 
+                        onSubmit={this.addTodo.bind(this)} />
+            </div>
+          </div>
+
           {this.state.user.id ? null :   //如果注册成功就关闭 UserDialog
             <UserDialog onSignUp={this.onSignUporSignIn.bind(this)}
                         onSignIn={this.onSignUporSignIn.bind(this)}/>
@@ -63,7 +67,8 @@ class App extends Component {
       )
   }
   showInput(){
-    $('.inputWrapper').show()
+    $('.footer').animate({left:'26em'})
+    $('.inputWrapper').show(500)  //500毫秒后显示
   }
   signOut(){
     signOut()
