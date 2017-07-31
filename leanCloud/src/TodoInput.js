@@ -7,7 +7,7 @@ function submit(props,e){
         if(e.target.value.trim()!==''){  //判断用户是否输入文字，若为空则拒绝
             props.onSubmit(e)
             $('.inputWrapper').hide()  //用户按了回车后隐藏输入框
-            $('.footer').animate({left:'34.5em'})
+            $('.footer').animate({left:'39.5em'})
         }else{
             alert('请输入文字')
         }

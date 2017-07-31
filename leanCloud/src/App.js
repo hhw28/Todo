@@ -67,7 +67,7 @@ class App extends Component {
       )
   }
   showInput(){
-    $('.footer').animate({left:'26em'})
+    $('.footer').animate({left:'31em'})
     $('.inputWrapper').show(500)  //500毫秒后显示
   }
   signOut(){
