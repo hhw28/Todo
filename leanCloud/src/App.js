@@ -8,6 +8,7 @@ import UserDialog from './UserDialog'
 import {getCurrentUser,signOut,TodoModel} from './leanCloud'
 import DeepCopyJSON from'./DeepCopyJSON'
 import $ from 'jquery'
+import './iconfont/iconfont.css'
 
 class App extends Component {
   constructor(props){

@@ -7,17 +7,31 @@
   flex-grow: 1;
   font-size: 1.4em;
   padding: 0 .5em;
-  color: #666;
 }
-.TodoItem>.button{
-  background: linear-gradient(to right,rgba(84,152,230,1),rgba(105,153,232,0.88));
-  color: #fff;
-  width: 1.2em;
-  height: 1.2em;
-  border:#fff;
-  border-radius: 50%;
-}
-.TodoItem >.checked{
+.TodoItem >.completed{
 	text-decoration: line-through;
 	opacity: 0.5;
+}
+.TodoItem >.completed1{
+	color: #a0a1a2;
+}
+
+
+
+.TodoItem .icon-delete{ 
+  border:none;
+  cursor: pointer;
+  background: none;
+  font-size: 18px;  
+}
+.TodoItem .icon-delete:hover{  
+  transform: scale(1.2,1.2);
+  transition: 0.5s;
+}
+.TodoItem .icon-underway{ 
+  font-size: 19px;  
+}
+.TodoItem .icon-completed{ 
+  font-size: 18px;  
+  color:#a0a1a2;
 }
