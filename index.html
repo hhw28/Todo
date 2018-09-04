@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Todolist</title>
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="iconfont/iconfont.css">
+  <style>
+    body{
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input{
+      border: none;
+      outline: none;
+    }
+    header,main,footer{
+      width: 550px;
+      box-sizing: border-box;
+    }
+    header>form{
+      background: #fefefe;
+      box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+      padding: 16px;
+      border: 1px solid #ededed;
+      border-bottom: none;
+    }
+    header>form>i.checkall{
+      color:#e6e6e6;
+      padding-right: 16px;
+      font-size:20px;
+    }
+    header>form>input{
+      background: #fefefe;
+      font-size: 24px;
+      font-style: italic;
+    }
+    ::-webkit-input-placeholder { /* WebKit browsers */
+      color: #e6e6e6;
+    }
+    header>h1{
+      color: rgba(175, 47, 47, 0.15);
+      font-size: 100px;
+      font-weight: 500;
+      margin: 0;
+      text-align: center;
+    }
+    main>ul{
+      background: #fff;
+    }
+    main>ul.list>li{
+      padding: 16px 16px 16px 9px;
+      border: 1px solid #ededed;
+      color: #af5b5e;
+    }
+    main>ul.list>li>i.icon-delete{
+      font-size: 20px;
+      position: absolute;
+      display: none;
+    }
+    main>ul.list>li:hover>i.icon-delete{
+      display: inline-block;
+    }
+    main>ul.list>li>input{
+      font-size: 24px;
+    }
+    main>ul>li>i.mark{
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #ededed;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 30px;
+      color: #fff;
+      margin-right: 9px;
+    }
+    main>ul>li>i.mark.active{
+      border-color: #25d1a6;
+      color: #25d1a6;
+    }
+    main>ul.list>li>input.todo{
+      width: 88%;
+    }
+    footer{
+      display: flex;
+      justify-content: center;
+      background: #fff;
+      padding: 10px 0;
+      color: #777;
+      border: 1px solid #ededed;
+      border-top: none;
+      position: relative;
+      box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+    }
+    footer>span.count{
+      position: absolute;
+      left: 15px;
+    }
+    footer>button.clear{
+      position: absolute;
+      right: 15px;
+      padding: 0;
+    }
+    footer>ul{
+      display: flex;
+    }
+    footer>ul>li{
+      padding: 0 8px;
+      margin: 0 5px;
+      border: 1px solid #fff;
+      border-radius: 3px;
+    }
+    footer>ul.btn-list>li:hover{
+      border-color: #f7eaea;
+    }
+    footer>ul>li.action{
+      border: 1px solid #efd5d5;
+    }
+
+    footer>button.clear{
+      border: none;
+      background: #fff;
+      color: inherit;
+      font-size: inherit;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>todos</h1>
+    <form action="">
+      <i class="checkall iconfont icon-checkall"></i>
+      <input type="text" placeholder="What needs to be done?" class="todo-input" id="add_list">
+    </form>
+  </header>
+  <main>
+    <ul class="list">
+      <li>
+        <i class="mark iconfont icon-complete"></i>
+        <input type="text" name="" id="" placeholder="11" class="todo">
+        <i class="iconfont icon-delete"></i>
+      </li>
+    </ul>
+  </main>
+  <footer>
+    <span class="count">{number} items left</span>
+    <ul class="btn-list">
+      <li class="btn action">All</li>
+      <li class="btn">Active</li>
+      <li class="btn">Completed</li>
+    </ul>
+    <button class="clear">Clear completed</button>
+  </footer>
+
+
+  <script>
+
+
+  </script>
+</body>
+</html>
