@@ -222,7 +222,142 @@
       </footer>
   </div>
 
+
   <script>
+
+    var todoInput = document.querySelector('#todo-input')
+    var todoList = document.querySelector('#todo-list')
+    var leftCount = document.querySelector('#left-count')
+    var toggleSelectAll = document.querySelector('#toggle-select-all')
+    var toggleSelectAllLabel = document.querySelector('.icon-checkall')
+
+    var filter = document.querySelector('#filter-wrapper')
+
+    filter.addEventListener('change',function(e){
+      var status = e.target.id
+      todoList.className = status
+    })
+
+    function updateLeftItems(){
+      //1、取出所有checkbox按钮
+      var checkboxAry = Array.from(todoList.querySelectorAll('input[type="checkbox"]'))
+      //2、筛选出未被checked状态的按钮（未完成的项目）
+      //3、转成数组可以获取到长度
+      var count = checkboxAry.filter(it => !it.checked).length
+
+      leftCount.textContent = count
+      if(count === 0){
+        toggleSelectAll.checked = true
+      }else{
+        toggleSelectAll.checked = false
+      }
+
+      //当全选按钮被选中的时候，筛选出未被选中的按钮进行点击
+      toggleSelectAll.addEventListener('change',function(){
+        if(this.checked){
+          checkboxAry.filter(it => !it.checked).forEach(it => it.click())
+        }else{
+          checkboxAry.filter(it => it.checked).forEach(it => it.click())
+        }
+      })
+
+      /*当有完成的li时，右下角clear completed出现*/
+      var clearButton = document.querySelector('#clear-button')
+      var completedCount = checkboxAry.filter(it => it.checked).length
+      if(completedCount > 0){
+        clearButton.style.display = 'inline-block'
+      }else{
+        clearButton.style.display = 'none'
+      }
+      clearButton.addEventListener('click',function(){
+        var completedLi = todoList.getElementsByClassName('completed')
+        for(var i=0;i<completedLi.length;i++){
+          todoList.removeChild(completedLi[i])
+        }
+      })
+
+
+
+      /*li数量为0时，隐藏footer*/
+      var liCount = Array.from(todoList.querySelectorAll('li')).length
+      if(liCount === 0){
+        footer.style.display = 'none'
+        toggleSelectAllLabel.style.visibility = 'hidden'
+      }else{
+        footer.style.display = 'flex'
+        toggleSelectAllLabel.style.visibility = 'visible'
+      }
+
+
+    }
+
+    //监听input框输入事件
+    todoInput.addEventListener('keyup',function(e){
+
+      var todoText = todoInput.value.trim()
+
+      if(e.keyCode === 13 && todoInput.value.trim()){
+        //当在input框中按下回车键，会新增li，并且在li中新增label/check/edit/span/i等标签
+        var li = document.createElement('li')
+        todoInput.value = ''  //当li被新增之后，使todoInput输入框清空
+
+
+        var label = document.createElement('label')
+        label.className = 'iconfont icon-complete'
+
+
+        var check = document.createElement('input')
+        check.type = 'checkbox'
+        check.addEventListener('change',function(){
+          updateLeftItems()
+          if(check.checked){
+            li.classList.add('completed')
+          }else{
+            li.classList.remove('completed')
+          }
+        })
+
+        //编辑 - input框
+        var edit = document.createElement('input')
+        edit.type = 'text'
+        edit.value = todoText
+        edit.addEventListener('blur',function(){
+          li.classList.remove('editing')
+          span.textContent = edit.value.trim()
+        })
+        edit.addEventListener('keyup',function(e){
+          if(e.keyCode === 13){
+            this.blur()
+            // li.classList.remove('editing')
+            // span.textContent = edit.value.trim()
+          }
+        })
+
+        var span = document.createElement('span')
+        span.textContent = todoText
+        span.addEventListener('dblclick',function(){
+          li.classList.add('editing')
+          edit.focus()
+        })
+
+
+        var del = document.createElement('i')
+        del.className = 'iconfont icon-delete'
+        del.addEventListener('click',function(){
+          //当del被点击的时候，找到它的父元素li，然后再找到li的父元素后删除掉该li
+          del.parentNode.parentNode.removeChild(del.parentNode)
+          updateLeftItems()
+        })
+
+        li.appendChild(label)
+        label.appendChild(check)
+        li.appendChild(edit)
+        li.appendChild(span)
+        li.appendChild(del)
+        document.querySelector('#todo-list').appendChild(li)
+        updateLeftItems()
+      }
+    })
 
   </script>
 </body>

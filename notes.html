@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>notes</title>
+</head>
+<body>
+  Notes: <select id="list"></select>
+  <button id="button">new note</button></br>
+  <textarea name="" id="currentnote" cols="30" rows="10"></textarea>
+
+  <script>
+
+    //缓存
+    function saveToStorage(){
+      localStorage.setItem('notes',JSON.stringify(notes))
+    }
+
+    var notes = JSON.parse(localStorage.getItem('notes')) || {'noteName':'noteContent'}
+    for(var name in notes){
+      if(notes.hasOwnProperty(name)){
+        addToList(name)
+      }
+    }
+
+    function addToList(name){
+      var option = document.createElement("option")
+      option.textContent = name
+      list.appendChild(option)
+    }
+    button.addEventListener('click',function addNote(){
+      var name = prompt('Note name','')
+      if(!name){
+        return
+      }
+      if(!notes.hasOwnProperty(name)){
+        notes[name] = ''
+        addToList(name)
+        saveToStorage()
+      }
+      list.value = name
+      current.value = notes[name]
+    })
+
+
+    var current = document.getElementById('currentnote')
+    current.value = notes[list.value]    //把笔记名称对应的笔记内容放入
+
+    current.addEventListener('change',function(){
+      notes[list.value] = current.value   //当笔记内容改变的时，更新缓存中的笔记
+      saveToStorage()
+    })
+    list.addEventListener('change',function(){
+      current.value = notes[list.value]   //当笔记标题切换时，也切换笔记内容
+    })
+
+
+
+
+  </script>
+</body>
+</html>
