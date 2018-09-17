@@ -40,9 +40,12 @@
       color:#e6e6e6;
       padding-right: 18px;
       font-size:20px;
-      visibility: hidden;
+      /* visibility: hidden; */
     }
-    header>div>input:checked~label{
+    /* header>div>input:checked~label{
+      color:black;
+    } */
+    header>div>label.checked{
       color:black;
     }
     header>div>input#toggle-select-all{
@@ -142,7 +145,7 @@
 
 
     footer{
-      display: none;
+      display: flex; /*display:none*/
       justify-content: center;
       background: #fff;
       padding: 10px 0;
@@ -178,7 +181,6 @@
       background: #fff;
       color: inherit;
       font-size: inherit;
-      display: none;
       outline: none;
     }
     footer>button#clear-button:hover{
@@ -188,41 +190,146 @@
 </head>
 <body>
   <h1>todos</h1>
-  <div>
-    <header>
-        <div>
-          <input type="checkbox" id="toggle-select-all">
-          <label for="toggle-select-all" class="iconfont icon-checkall"></label>
-          <input type="text" placeholder="What needs to be done?" id="todo-input" autocomplete="off">
-        </div>
-      </header>
-      <main>
-        <ul id="todo-list">
-          <!-- <li>
-            <label class="iconfont icon-complete">
-              <input type="checkbox">
-            </label>
-            <input type="text" value="content">
-            <span>content</span>
-            <i class="iconfont icon-delete"></i>
-          </li> -->
-        </ul>
-      </main>
-      <footer id="footer">
-          <span class="count"><span id="left-count"></span> items left</span>
-          <span id="filter-wrapper">
-            <input type="radio" name="filter" id="all" checked>
-            <label for="all">All</label>
-            <input type="radio" name="filter" id="active">
-            <label for="active">Active</label>
-            <input type="radio" name="filter" id="completed">
-            <label for="completed">Completed</label>
-          </span>
-          <button id="clear-button">Clear Completed</button>
-      </footer>
-  </div>
+  <div id="todo-app"></div>
+
+  <script src="jquery-3.3.1.js"></script>
 
   <script>
+    // var wrapper = document.querySelector('#todo-app')
+    var wrapper = $('#todo-app')
+    // var todos = [{
+    //   done:true,
+    //   content:'foo',
+    //   editing:false,
+    // },{
+    //   done:false,
+    //   content:'bar',
+    //   editing:false,
+    // },{
+    //   done:false,
+    //   content:'baz',
+    //   editing:false,
+    // }]
+
+    var show = 'all'
+
+    function data2html(todos){
+      return `
+        <header>
+          <div>
+            <input type="checkbox" id="toggle-select-all" ${todos.every(it => it.done) ? 'checked' : ''}>
+            <label for="toggle-select-all" class="iconfont icon-checkall ${todos.every(it => it.done) ? 'checked' : ''}"></label>
+            <input type="text" placeholder="What needs to be done?" id="todo-input" autocomplete="off">
+          </div>
+        </header>
+        <main>
+          <ul id="todo-list" class="${show}">
+            ${
+              todos.map(it => `
+                <li class="${it.done ? 'completed' : ''} ${it.editing ? 'editing' : ''}">
+                  <label class="iconfont icon-complete">
+                    <input type="checkbox" ${it.done ? 'checked' : ''}>
+                  </label>
+                  <input type="text" value="${it.content}">
+                  <span>${it.content}</span>
+                  <i class="iconfont icon-delete"></i>
+                </li>
+              `).join('') //map返回字符串
+            }
+          </ul>
+        </main>
+        <footer id="footer">
+          <span class="count"><span id="left-count">${todos.filter(it => !it.done).length}</span> items left</span>
+          <span id="filter-wrapper" >
+            <input type="radio" name="filter" ${show === 'all' ? 'checked' : ''} id="all"><label for="all">All</label>
+            <input type="radio" name="filter" ${show === 'active' ? 'checked' : ''} id="active"><label for="active">Active</label>
+            <input type="radio" name="filter" ${show === 'completed' ? 'checked' : ''} id="completed"><label for="completed">Completed</label>
+          </span>
+          <button id="clear-button" style="display:${todos.some(it => it.done) ? 'inline-block' : 'none'}">Clear Completed</button>
+        </footer>
+      `
+    }
+    var todos = JSON.parse(localStorage.getItem('todos'))
+
+
+    function render(){
+      localStorage.setItem('todos',JSON.stringify(todos))
+      document.querySelector('#todo-app').innerHTML = data2html(todos)
+      // $('#todo-app').html(data2html(todos))
+    }
+    document.addEventListener('DOMContentLoaded',function(){
+      render()
+    })
+
+    // input框
+    wrapper.on('keyup', '#todo-input', function(e){
+      if(e.keyCode === 13 && e.target.value){
+        todos.push({
+          done:false,
+          content:e.target.value,
+          editing:false,
+        })
+        e.target.value = ''
+        render()
+        $('#todo-input').focus()
+      }
+    })
+    // deleted
+    wrapper.on('click', 'i.icon-delete', function(e){
+      var li = e.target.parentNode
+      var index = Array.from(li.parentNode.children).findIndex(it => it === li)
+      todos.splice(index,1)
+      render()
+    })
+    // 每个li的完成按钮
+    wrapper.on('click', 'label.icon-complete>input[type="checkbox"]', function(e){
+      var li = e.target.parentNode.parentNode
+      var index = Array.from(li.parentNode.children).findIndex(it => it === li)
+      todos[index].done = e.target.checked
+      render()
+    })
+    // 全选
+    wrapper.on('click', 'label.icon-checkall', function(e){
+      if(todos.every(it => it.done)){
+        todos.forEach(it => it.done = false)
+      }else{
+        todos.forEach(it => it.done = true)
+      }
+      render()
+    })
+    // 清空完成按钮
+    wrapper.on('click', 'button#clear-button', function(e){
+      //过滤掉已经完成的li，留下还未完成的
+      todos = todos.filter(it => it.done === false)
+      render()
+    })
+    // 切换 all/active/completed
+    var show = 'all'
+    wrapper.on('click', 'input[type="radio"]', function(e){
+      show = e.target.id
+      render()
+    })
+    // li 双击编辑 input
+    // 1 - span 双击切换为 input 状态并且聚焦
+    var index
+    wrapper.on('dblclick', '#todo-list span', function(e){
+      e.target.parentNode.classList.add('editing')
+      $('#todo-list input[type="text"]').focus()
+
+      var li = e.target.parentNode
+      index = Array.from(li.parentNode.children).findIndex(it => it === li)
+    })
+    // 2 - input
+    wrapper.on('blur', '#todo-list input[type="text"]', function(e){
+      todos[index].content = e.target.value
+      todos[index].editing = false
+      render()
+    })
+    wrapper.on('keyup', '#todo-list input[type="text"]', function(e){
+      if(e.keyCode === 13 && e.target.value){
+        this.blur()
+      }
+    })
 
   </script>
 </body>
