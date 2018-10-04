@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue-todo</title>
+</head>
+<body>
+  <div id="todo-app">
+    <!-- <header>
+      <div>
+        <input type="checkbox" id="toggle-select-all">
+        <label for="toggle-select-all" class="iconfont icon-checkall"></label>
+        <input type="text" placeholder="What needs to be done?" id="todo-input" autocomplete="off">
+      </div>
+    </header>
+    <main>
+      <ul id="todo-list" class="">
+        <li class="">
+          <label class="iconfont icon-complete">
+            <input type="checkbox">
+          </label>
+          <input type="text" value="">
+          <span></span>
+          <i class="iconfont icon-delete"></i>
+        </li>
+      </ul>
+    </main>
+    <footer id="footer">
+      <span class="count"><span id="left-count"></span> items left</span>
+      <span id="filter-wrapper" >
+        <input type="radio" name="filter" id="all"><label for="all">All</label>
+        <input type="radio" name="filter" id="active"><label for="active">Active</label>
+        <input type="radio" name="filter" id="completed"><label for="completed">Completed</label>
+      </span>
+      <button id="clear-button" style="">Clear Completed</button>
+    </footer> -->
+    <header>
+      <input type="checkbox" name="" id="" v-on:click="toggleSelectAll" v-bind:checked="todos.every(it=>it.done)">
+      <input type="text" v-model="message" v-on:keyup.enter="addTodo()">
+    </header>
+    <main>
+      <ul>
+        <li v-for="(todo, index) in filterTodos(todos,showingTodoStatus)">
+          <input type="checkbox" v-model="todo.done" id="">
+          <span>{{todo.content}}</span>
+          <span v-on:click="deleteTodo(index)">x</span>
+        </li>
+      </ul>
+    </main>
+    <footer>
+      <span>{{leftTodosCount}} item{{itemPlural}} left</span>
+      <div>
+        <label><input type="radio" v-model="showingTodoStatus" value="all" id="">all</label>
+        <label><input type="radio" v-model="showingTodoStatus" value="active" id="">active</label>
+        <label><input type="radio" v-model="showingTodoStatus" value="completed" id="">completed</label>
+      </div>
+      <button v-on:click="clearCompleted" v-if="showClearCompletedBtn">clear completed</button>
+    </footer>
+  </div>
+</body>
+<script src="vue-2.5.17.js"></script>
+<script>
+  var todo = new Vue({
+    el:'#todo-app',
+    data:{
+      message:'',
+      showingTodoStatus:'all',
+      todos:[
+        {
+          content:'foo',
+          done:false,
+          editing:false,
+        },{
+          content:'bar',
+          done:false,
+          editing:false,
+        },{
+          content:'foo',
+          done:true,
+          editing:false,
+        }
+      ],
+    },
+    computed:{
+      showClearCompletedBtn:function(){
+        return this.todos.filter(it => it.done === true).length
+      },
+      leftTodosCount:function(){
+        return this.todos.filter(it => it.done === false).length
+      },
+      itemPlural:function(){
+        return this.leftTodosCount > 1 ? 's' : ' '
+      },
+    },
+    methods:{
+      addTodo:function(){
+        todo.$data.todos.push({
+          content:todo.$data.message,
+          done:false,
+          editing:false,
+        })
+        todo.$data.message = ''
+      },
+      deleteTodo:function(index){
+        todo.$data.todos.splice(index,1)
+      },
+      toggleSelectAll:function(){
+        if(todo.$data.todos.every(it => it.done)){
+          todo.$data.todos.forEach(it => it.done = false)
+        }else{
+          todo.$data.todos.forEach(it => it.done = true)
+        }
+      },
+      filterTodos:function(todos, status){
+        if(status == 'all'){
+          return todos
+        }
+        if(status == 'active'){
+          return todos.filter(it => it.done === false)
+        }
+        if(status == 'completed'){
+          return todos.filter(it => it.done === true)
+        }
+      },
+      clearCompleted:function(){
+        todo.$data.todos = todo.$data.todos.filter(it => it.done === false)
+      }
+    },
+
+  })
+</script>
+</html>
