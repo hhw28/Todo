@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vuex</title>
+</head>
+<body>
+  <div id="app">
+    <todo-app></todo-app>
+  </div>
+</body>
+<script src="vue-2.5.17.js"></script>
+<script src="vuex-3.0.1.js"></script>
+<script>
+
+  var store = new Vuex.Store({
+    state: {
+      editingIndex: -1,
+      showingCategory: 'all',
+      todos: [{
+        done: true,
+        content: 'eat',
+      }, {
+        done: false,
+        content: 'drink',
+      }],
+    },
+    getters: {
+      showingTodos: state => {
+        if (state.showingCategory == 'all') {
+          return state.todos
+        } else if (state.showingCategory == 'active') {
+          return state.todos.filter(it => !it.done)
+        } else if (state.showingCategory == 'completed') {
+          return state.todos.filter(it => it.done)
+        }
+      },
+      isAllCompleted: state => state.todos.every(it => it.done),
+      showClearButton: state => state.todos.some(it => it.done),
+      leftCount: state => state.todos.filter(it => !it.done).length,
+    },
+    mutations: {
+      editTodo(state, index) {
+        state.editingIndex = index
+      },
+      switchCategory(state, category) {
+        state.showingCategory = category
+      },
+      addTodo(state, todoContent) {
+        state.todos.push({
+          done: false,
+          content: todoContent,
+        })
+      },
+      delTodo(state, todo) {
+        state.todos = state.todos.filter(it => it !== todo)
+        // var index = state.todos.indexOf(todo)
+        // if (index >= 0) {
+        //   state.todos.splice(index, 1)
+        // }
+      },
+      clearCompleted(state) {
+        state.todos = state.todos.filter(it => !it.done)
+      },
+      toggleCompleteAll(state) {
+        if (store.getters.isAllCompleted) {
+          state.todos.forEach(it => it.done = false)
+        } else {
+          state.todos.forEach(it => it.done = true)
+        }
+      },
+      changeTodoContent(state, {todo, content}) {
+        todo.content = content
+      },
+      toggleTodoStatus(state, todo) {
+        // console.log('toggleing todo status')
+        // todo.done = !todo.done
+        var index = state.todos.indexOf(todo)
+        if (index >= 0) {
+          state.todos[index].done = !state.todos[index].done
+        }
+      }
+    }
+  })
+
+  Vue.component('TodoApp', {
+    template: `
+      <div>
+        <TodoInput/>
+        <TodoList/>
+        <TodoInfo/>
+      </div>
+    `
+  })
+
+  Vue.component('TodoInput', {
+    template: `
+      <div>
+        <input type="checkbox" :checked="isAllCompleted" @click="toggleCompleteAll" />
+        <input type="text" v-model.trim="todoText" @keyup.enter="addTodo"/>
+      </div>
+    `,
+    data() {
+      return {
+        todoText: ''
+      }
+    },
+    computed: {
+      ...Vuex.mapGetters([
+        'isAllCompleted'
+      ])
+    },
+    methods: {
+      addTodo(e) {
+        if (this.todoText) {
+          this.$store.commit('addTodo', this.todoText)
+          this.todoText = ''
+        }
+      },
+      ...Vuex.mapMutations([
+        'toggleCompleteAll'
+      ])
+    }
+  })
+
+  Vue.component('TodoList', {
+    template: `
+      <ul>
+        <TodoItem v-for="(todo,index) in todos" :isEditing="index == editingIndex" :todo="todo" :index="index"></TodoItem>
+      </ul>
+    `,
+    computed: {
+      ...Vuex.mapState({
+        editingIndex: 'editingIndex',
+      }),
+      ...Vuex.mapGetters({
+        todos: 'showingTodos',
+      })
+    },
+  })
+
+  Vue.directive('focus', {
+    inserted: function(el) {
+      el.focus()
+    }
+  })
+
+  Vue.component('TodoItem', {
+    props: ['todo', 'isEditing', 'index'],
+    template: `
+      <li>
+        <input type="checkbox" :checked="todo.done" @click="toggleTodoStatus(todo)" />
+
+        <span v-if="!isEditing" @dblclick="editTodo(index)">{{todo.content}}</span>
+        <input v-else v-focus type="text" :value="todo.content"
+          @keyup.enter="changeTodoContent({todo, content: $event.target.value});editTodo(-1)"
+          @blur="changeTodoContent({todo, content: $event.target.value});editTodo(-1)"
+        />
+
+        <button @click="delTodo(todo)">&times;</button>
+      </li>
+    `,
+    methods: {
+      ...Vuex.mapMutations({
+        editTodo: 'editTodo',
+        changeTodoContent: 'changeTodoContent',
+        delTodo: 'delTodo',
+        toggleTodoStatus: 'toggleTodoStatus'
+      })
+    }
+  })
+
+  Vue.component('TodoInfo', {
+    template: `
+      <div>
+        <span>{{leftCount}} item(s) left</span>
+        <span>
+          <input type="radio" @click="switchCategory('all')" :checked="showingCategory == 'all'" />
+          <input type="radio" @click="switchCategory('active')" :checked="showingCategory == 'active'" />
+          <input type="radio" @click="switchCategory('completed')" :checked="showingCategory == 'completed'" />
+        </span>
+        <button v-if="showClearButton" @click="clearCompleted">Clear Completed</button>
+      </div>
+    `,
+    computed: {
+      ...Vuex.mapState({
+        showingCategory: state => state.showingCategory
+      }),
+      ...Vuex.mapGetters([
+        'showClearButton',
+        'leftCount',
+      ])
+    },
+    methods: Vuex.mapMutations({
+      clearCompleted: 'clearCompleted',
+      switchCategory: function(commit, category) {
+        commit('switchCategory', category)
+      }
+    })
+  })
+
+  var app = new Vue({
+    el: '#app',
+    store,
+  })
+
+
+
+</script>
+</html>
